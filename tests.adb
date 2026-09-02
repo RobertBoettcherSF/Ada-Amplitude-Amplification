@@ -36,6 +36,7 @@ procedure Tests is
    S1      : constant State_Vector := Uniform_Superposition (0, 3);
    S_Zero  : constant State_Vector (0 .. 1) := [0.0, 0.0];
    S_Valid : constant State_Vector (0 .. 1) := [1.0, 0.0];
+   S_Orth  : constant State_Vector (0 .. 1) := [0.0, 1.0];
    S_High  : constant State_Vector (0 .. 1) := [1.0, 1.0];
    S_Mixed : constant State_Vector (0 .. 2) := [0.1, -0.8, 0.3];
 
@@ -55,7 +56,7 @@ begin
    -- TEST 3: Inner Product Verification
    Put_Line ("TEST 3 — Inner Product Calculations");
    Check ("3.1 Parallel vectors equal 1.0", Is_Close (Inner_Product (S_Valid, S_Valid), 1.0));
-   Check ("3.2 Orthogonal vectors equal 0.0", Is_Close (Inner_Product (S_Valid, [0.0, 1.0]), 0.0));
+   Check ("3.2 Orthogonal vectors equal 0.0", Is_Close (Inner_Product (S_Valid, S_Orth), 0.0));
    Check ("3.3 Superposition sum equals 1.0", Is_Close (Inner_Product (S1, S1), 1.0));
 
    -- TEST 4: Measure Most Likely Extraction
