@@ -26,7 +26,7 @@ package Amplitude_Amplification is
           Pre    => Left'Length = Right'Length and then Left'First = Right'First;
 
    -- Applies the Oracle phase flip to states that evaluate to True via the oracle
-   procedure Apply_Oracle (State : in out State_Vector; Oracle : not null Oracle_Function)
+   procedure Apply_Oracle (State : in out State_Vector; Oracle : not null access function (Index : State_Index) return Boolean)
      with Post => Is_Normalized (State);
 
    -- Applies the Diffusion operator (inversion about the mean/initial state)
@@ -38,7 +38,7 @@ package Amplitude_Amplification is
    -- Applies a predetermined, fixed number of amplification iterations.
    function Standard_Amplification
      (Initial_State : State_Vector;
-      Oracle        : not null Oracle_Function;
+      Oracle        : not null access function (Index : State_Index) return Boolean;
       Iterations    : Natural) return State_Vector
      with Pre  => Is_Normalized (Initial_State),
           Post => Is_Normalized (Standard_Amplification'Result);
@@ -52,7 +52,7 @@ package Amplitude_Amplification is
    -- Dynamically schedules iterations to find a solution when the number of target states is unknown.
    function Exponential_Search
      (Initial_State : State_Vector;
-      Oracle        : not null Oracle_Function;
+      Oracle        : not null access function (Index : State_Index) return Boolean;
       Max_Steps     : Natural := 1000) return State_Index
      with Pre => Is_Normalized (Initial_State);
 
