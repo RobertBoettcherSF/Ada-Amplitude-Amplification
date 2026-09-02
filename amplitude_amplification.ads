@@ -1,5 +1,3 @@
-with Ada.Numerics.Generic_Elementary_Functions;
-
 package Amplitude_Amplification is
 
    -- Domain types to ensure strong typing
