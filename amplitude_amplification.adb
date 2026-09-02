@@ -24,7 +24,7 @@ package body Amplitude_Amplification is
       return Sum;
    end Inner_Product;
 
-   procedure Apply_Oracle (State : in out State_Vector; Oracle : not null Oracle_Function) is
+   procedure Apply_Oracle (State : in out State_Vector; Oracle : not null access function (Index : State_Index) return Boolean) is
    begin
       for I in State'Range loop
          -- The oracle marks solutions by flipping their phase (multiplying amplitude by -1)
@@ -47,7 +47,7 @@ package body Amplitude_Amplification is
 
    function Standard_Amplification
      (Initial_State : State_Vector;
-      Oracle        : not null Oracle_Function;
+      Oracle        : not null access function (Index : State_Index) return Boolean;
       Iterations    : Natural) return State_Vector
    is
       Current_State : State_Vector := Initial_State;
@@ -76,7 +76,7 @@ package body Amplitude_Amplification is
 
    function Exponential_Search
      (Initial_State : State_Vector;
-      Oracle        : not null Oracle_Function;
+      Oracle        : not null access function (Index : State_Index) return Boolean;
       Max_Steps     : Natural := 1000) return State_Index
    is
       M            : Long_Float := 1.0;
