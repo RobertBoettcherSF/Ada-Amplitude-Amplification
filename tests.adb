@@ -23,15 +23,21 @@ procedure Tests is
 
    -- Oracles used for testing
    function Oracle_3 (Idx : State_Index) return Boolean is (Idx = 3);
-   function Oracle_None (Idx : State_Index) return Boolean is (False);
+   
+   function Oracle_None (Idx : State_Index) return Boolean is
+      pragma Unreferenced (Idx);
+   begin
+      return False;
+   end Oracle_None;
+   
    function Oracle_Evens (Idx : State_Index) return Boolean is (Idx mod 2 = 0);
 
    -- Test Vectors
    S1      : constant State_Vector := Uniform_Superposition (0, 3);
-   S_Zero  : constant State_Vector (0 .. 1) := (0.0, 0.0);
-   S_Valid : constant State_Vector (0 .. 1) := (1.0, 0.0);
-   S_High  : constant State_Vector (0 .. 1) := (1.0, 1.0);
-   S_Mixed : constant State_Vector (0 .. 2) := (0.1, -0.8, 0.3);
+   S_Zero  : constant State_Vector (0 .. 1) := [0.0, 0.0];
+   S_Valid : constant State_Vector (0 .. 1) := [1.0, 0.0];
+   S_High  : constant State_Vector (0 .. 1) := [1.0, 1.0];
+   S_Mixed : constant State_Vector (0 .. 2) := [0.1, -0.8, 0.3];
 
 begin
    -- TEST 1: Uniform Superposition Creation
@@ -49,7 +55,7 @@ begin
    -- TEST 3: Inner Product Verification
    Put_Line ("TEST 3 — Inner Product Calculations");
    Check ("3.1 Parallel vectors equal 1.0", Is_Close (Inner_Product (S_Valid, S_Valid), 1.0));
-   Check ("3.2 Orthogonal vectors equal 0.0", Is_Close (Inner_Product (S_Valid, (0.0, 1.0)), 0.0));
+   Check ("3.2 Orthogonal vectors equal 0.0", Is_Close (Inner_Product (S_Valid, [0.0, 1.0]), 0.0));
    Check ("3.3 Superposition sum equals 1.0", Is_Close (Inner_Product (S1, S1), 1.0));
 
    -- TEST 4: Measure Most Likely Extraction
@@ -160,7 +166,7 @@ begin
    -- TEST 14: Edge Case (Single Element State)
    Put_Line ("TEST 14 — Edge Case (Single Element Domain)");
    declare
-      S_One : constant State_Vector (0 .. 0) := (0 => 1.0);
+      S_One : constant State_Vector (0 .. 0) := [0 => 1.0];
       S_One_Res : constant State_Vector := Standard_Amplification (S_One, Oracle_Evens'Access, 1);
    begin
       Check ("14.1 Maintained vector length of 1", S_One_Res'Length = 1);
